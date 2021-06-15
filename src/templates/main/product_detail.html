@@ -1,0 +1,624 @@
+{% extends 'index.html' %}
+{% load humanize %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block menu_bar %}
+<div class="full-top-title" style="">
+	<div class="inner-container">
+		<div class="top-title-content">
+			<h1>{{ object.name }}</h1>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="full-content">
+	<div class="inner-content inner-container">
+		<div id="wrap-content" class="limit clearfix">
+			<div class="ct-sanpham">
+				<div class="limit-page">
+					<section class="product-box">
+						<div id="primary" class="site-content">
+							<div id="content" role="main">
+								<div class="post-729 product type-product status-publish has-post-thumbnail pro_type-chung-cu pro_listing_type-ban pro_price-100-000-000d-200-000-000d pro_price-200-000-000d-300-000-000d pro_price-300-000-000d-500-000-000d pro_price-500-000-000d-1-000-000-000d pro_price-gia-duoi-100-000-000d pro_type_acreage-120-160-m2 pro_type_acreage-50-80-m2 pro_type_acreage-90-120-m2 pro_type_acreage-duoi-20-m2 pro_type_acreage-tren-160-m2 product_cat-du-an-360 first instock shipping-taxable purchasable product-type-simple">
+									<div class="comtents">
+										<div class="images">
+											<div id="slider" class="slider owl-carousel">
+												{% for image in object.images.all %}
+												{% if forloop.first %}
+												<li class="item">
+													<img src="{{ image.path.url }}"
+														 alt="{{ image.alt }}"
+														 class="main-image"/>
+												</li>
+												{% else %}
+												<li class="item"><img width="500" height="313"
+																	  src="{{ image.path.url }}"
+																	  class="attachment-shop_single size-shop_single"
+																	  alt="{{ image.alt }}"
+																	  sizes="(max-width: 500px) 100vw, 500px"/></li>
+												{% endif %}
+												{% endfor %}
+											</div>
+											<div id="thumbnailSlider" class="thumbnail-slider owl-carousel">
+												{% for image in object.images.all %}
+												{% if forloop.first %}
+												<li class="item">
+													<img src="{{ image.path.url }}"
+														 alt="{{ image.alt }}"
+														 class="main-image"/>
+												</li>
+												{% else %}
+												<li class="item"><img width="500" height="313"
+																	  src="{{ image.path.url }}"
+																	  class="attachment-shop_single size-shop_single"
+																	  alt="{{ image.alt }}"
+																	  sizes="(max-width: 500px) 100vw, 500px"/></li>
+												{% endif %}
+												{% endfor %}
+											</div>
+											<script>
+												waitJquery(function(){
+													jQuery("a[data-rel^='prettyPhoto']").prettyPhoto({
+														hook: 'data-rel',
+														social_tools: false,
+														theme: 'pp_woocommerce',
+														horizontal_padding: 8,
+														opacity: 0.8,
+														deeplinking: false,
+														show_title: false,
+													});
+												  // reference for main items
+												  var slider = jQuery('.slider');
+												  // reference for thumbnail items
+												  var thumbnailSlider = jQuery('.thumbnail-slider');
+												  //transition time in ms
+												  var duration = 300;
+
+												  // carousel function for main slider
+												  slider.owlCarousel({
+												   loop:false,
+												   nav:false,
+												   dots: false,
+												   singleItem:true,
+												   autoplayHoverPause: true,
+												   mouseDrag:false,touchDrag:false,
+												   items:1
+												  }).on('changed.owl.carousel', function (e) {
+												   //On change of main item to trigger thumbnail item
+												   thumbnailSlider.trigger('to.owl.carousel', [e.item.index, duration, true]);
+												  });
+
+												  // carousel function for thumbnail slider
+												  thumbnailSlider.owlCarousel({
+												   loop:false,
+												   // center:true, //to display the thumbnail item in center
+												   nav:true,
+												   dot:false,
+												   margin:10,
+												   autoplayHoverPause: false,
+												   items:4,
+												   navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+												  }).on('click', '.owl-item', function () {
+													jQuery('.owl-item').removeClass('active_img');
+													jQuery(this).addClass('active_img');
+												   // On click of thumbnail items to trigger same main item
+												   slider.trigger('to.owl.carousel', [jQuery(this).index(), duration, true]);
+
+												  }).on('changed.owl.carousel', function (e) {
+												   // On change of thumbnail item to trigger main item
+												   slider.trigger('to.owl.carousel', [e.item.index, duration, true]);
+												  });
+
+
+												  //These two are navigation for main items
+												  jQuery('.slider-right').click(function() {
+												   slider.trigger('next.owl.carousel');
+												  });
+												  jQuery('.slider-left').click(function() {
+												   slider.trigger('prev.owl.carousel');
+												  });
+												  checkMinheight('#thumbnailSlider .item');
+												  var url_img = $('#thumbnailSlider .item.item-360').attr('data-link');
+												  if (jQuery('#panorama').length!=0) {
+
+													viewer = pannellum.viewer('panorama', {
+													  "type": "equirectangular",
+													  "panorama": url_img,
+													  "autoLoad": true,
+													  "compass": true,
+													  "pitch": -10,
+													  "maxPitch":-10,
+													  "title": "Image 360",
+													  "showControls": true
+													});
+												  }
+												 });
+
+											</script>
+										</div>
+										<div class="summary entry-summary">
+											<div class="product_title-row">
+												<div class="product_title-l">
+													<h1 class="product_title entry-title">{{ object.name }}</h1></div>
+											</div>
+											<div class="woocommerce-product-rating">
+												<div class="star-rating" role="img"><span style="width:{{ object.get_review_rate }}%"></span></div>
+												<a href="#reviews" class="woocommerce-review-link"
+												   rel="nofollow">(<span class="count">{{ object.enable_reviews.count }}</span> đánh giá của khách hàng)</a>
+											</div>
+											<p class="price">
+												<span class="amount">{{ object.price|intcomma }}<span>&#8363;</span></span>
+											</p>
+											<div class="product_meta">
+												<div class="group-status">
+													<span class="custom_meta_status block">Thuộc Quận/huyện:<span class="status_name">{{ object.get_short_address }}</span></span>
+													<span class="custom_meta_status">Kiểu dự án:<span class="status_name">{{ object.get_property_type_display }}</span></span>
+													<span class="custom_meta_status ">Trạng thái:<span class="status_name ">{{ object.get_payment_type_display }}</span></span>
+												</div>
+												{% if object.category %}
+												<span class="posted_in custom_meta_status">Danh mục:
+													<a href="{{ object.category.get_absolute_url }}" rel="tag">{{ object.category.name }}</a>
+												</span>
+												{% endif %}
+											</div>
+											<div class="product_share">
+												<div class="fb-like"
+													 data-href="{{ request.get_full_path }}"
+													 data-layout="button_count" data-action="like"
+													 data-show-faces="true" data-share="true">
+												</div>
+											</div>
+											<div class="pro-contact-phone">
+												<a class="pro-contact-mobile" href="tel:{{ general_config.hotline }}" style="">
+													<span class="pro-contact-icon"></span>
+													<div class="pro-contact-mb">
+														<span class="pro-contact-number">{{ general_config.hotline }}</span>
+														<i>{{ general_config.working_time }}</i>
+													</div>
+												</a>
+											</div>
+											<div class="share">
+												<h3 class="share-title">Chia sẻ trên</h3>
+												<div class="icon-share">
+													<a target="_blank"
+													   href="//www.facebook.com/sharer.php?u={{ request.build_absolute_uri }}"
+													   class="face"><i class="fa fa-facebook"></i></a>
+													<a target="_blank"
+													   href="//twitter.com/share?text={{ object.name }}&amp;url={{ request.build_absolute_uri }}"
+													   class="twitter"><i class="fa fa-twitter"></i></a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="cusotm-woocommerce-tab">
+										<div class="cusotm-wooocommerce-tab-list" role="tablist">
+											<div class="parameter_product_tab" id="tab-title-parameter_product"
+												 role="tab" aria-controls="tab-parameter_product">
+												<div class="cusotm-woocommerce-tab-title">
+													<h3>Đặc điểm dự án </h3>
+												</div>
+												<div class="cusotm-woocommerce-tab-content entry-content">
+													<div class="woo_parameter_details">
+														<div class="parameter-flex">
+															<ul class="parameter-flex-l">
+																<li class="item">
+																	<p>Loại tin rao:</p>
+																	<span>{{ object.get_property_type_display }}</span>
+																</li>
+																<li class="item">
+																	<p>Địa chỉ:</p>
+																	<span>{{ object.get_full_address }}</span>
+																</li>
+																<li class="item">
+																	<p>Diện tích:</p>
+																	<span>{{ object.area }} m²</span>
+																</li>
+																<li class="item">
+																	<p>Phòng ngủ:</p>
+																	<span>{{ object.get_bedroom_display }}</span>
+																</li>
+																<li class="item">
+																	<p>Phòng WC:</p>
+																	<span>{{ object.get_toilet_display }}</span>
+																</li>
+																<li class="item">
+																	<p>Hướng nhà(dự án):</p>
+																	<span>{{ object.get_direction_display }}</span>
+																</li>
+															</ul>
+<!--															<div class="parameter-flex-r">-->
+<!--																{% if object.user %}-->
+<!--																<div class="avatar-parameter">-->
+<!--																	<img src="{% if object.user.userprofile.avatar %}{{ object.user.userprofile.avatar }}{% else %}/static/images/empty_image.png{% endif %}"-->
+<!--																		 alt="{{ object.user.username }}">-->
+<!--																</div>-->
+<!--																<ul class="parameter-manage">-->
+<!--																	<li>-->
+<!--																		<p>Tên liên lạc</p>-->
+<!--																		<span>{{ object.user.get_full_name }}</span>-->
+<!--																	</li>-->
+<!--																	<li>-->
+<!--																		<p>Số điện thoại</p>-->
+<!--																		<a href="tel:{{ object.user.userprofile.phone_number }}">{{ object.user.userprofile.phone_number }}</a>-->
+<!--																	</li>-->
+<!--																	<li>-->
+<!--																		<p>Thư điện tử</p>-->
+<!--																		<a href="mailto:{{ object.user.email }}">{{ object.user.email }}</a>-->
+<!--																	</li>-->
+<!--																</ul>-->
+<!--																{% endif %}-->
+<!--															</div>-->
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="description_tab" id="tab-title-description" role="tab"
+												 aria-controls="tab-description">
+												<div class="cusotm-woocommerce-tab-title">
+													<h3>Mô tả</h3>
+												</div>
+												<div class="cusotm-woocommerce-tab-content entry-content">
+													<div class="tab_content_details">
+														{{ object.description|safe }}
+													</div>
+												</div>
+											</div>
+											<div class="map_product_tab" id="tab-title-map_product" role="tab"
+												 aria-controls="tab-map_product">
+												<div class="cusotm-woocommerce-tab-title">
+													<h3>Vị trí dự án</h3>
+												</div>
+												<div class="cusotm-woocommerce-tab-content entry-content">
+													<h2> Vị trí dự án {{ object.name }}</h2>
+													<div class="map-product">
+														<iframe src="https://www.google.com/maps/embed?q="
+																width="600" height="450" frameborder="0"
+																style="border:0;" allowfullscreen="">
+														</iframe>
+													</div>
+												</div>
+											</div>
+											<div class="reviews_tab" id="tab-title-reviews" role="tab"
+												 aria-controls="tab-reviews">
+												<div class="cusotm-woocommerce-tab-title">
+													<h3>Đánh giá (<span class="count">{{ object.enable_reviews.count }}</span>)</h3>
+												</div>
+												<div class="cusotm-woocommerce-tab-content entry-content">
+													<div id="reviews">
+														<div id="comments">
+															<h2><span class="count">{{ object.enable_reviews.count }}</span> đánh giá cho {{ object.name }}</h2>
+															<ol class="commentlist">
+																{% for review in object.enable_reviews %}
+																<li class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+																	<div id="comment-{{ review.id }}" class="comment_container">
+																		<img alt=''
+																			 src='http://2.gravatar.com/avatar/59eb21e276c263a344e0904ba89841ed?s=60&#038;d=mm&#038;r=g'
+																			 srcset='http://2.gravatar.com/avatar/59eb21e276c263a344e0904ba89841ed?s=120&#038;d=mm&#038;r=g 2x'
+																			 class='avatar avatar-60 photo'
+																			 height='60' width='60'/>
+																		<div class="comment-text">
+																			<div class="star-rating" role="img"
+																				 aria-label="Được xếp hạng {{ review.vote }} 5 sao">
+																					<span style="width:{{ review.rate }}%">Được xếp hạng <strong
+																							class="rating">{{ review.vote }}</strong> 5 sao</span>
+																			</div>
+																			<p class="meta">
+																				<strong class="woocommerce-review__author">{{ review.name }}</strong>
+																				<span class="woocommerce-review__dash">&ndash;</span>
+																				<time class="woocommerce-review__published-date"
+																					  datetime="{{ review.created_time|date:'d/m/Y' }}">
+																					{{ review.created_time|date:'d/m/Y' }}
+																				</time>
+																			</p>
+																			<div class="description">
+																				<p>{{ review.comment }}</p>
+																			</div>
+																		</div>
+																	</div>
+																</li>
+																{% endfor %}
+															</ol>
+															{% if not object.enable_reviews %}
+															<p class="woocommerce-noreviews">Chưa có đánh giá nào.</p>
+															{% endif %}
+														</div>
+														<div id="review_form_wrapper">
+															<div id="review_form">
+																<div id="respond" class="comment-respond">
+																	<h3 id="reply-title" class="comment-reply-title">
+																		{% if object.enable_reviews %}
+																		Thêm đánh giá
+																		{% else %}
+																		Trở thành người đánh giá đầu tiên cho “{{ object.name }}”
+																		{% endif %}
+																	</h3>
+																	<form id="review-form" action="{% url 'products.review' %}" method="post">
+																		<div class="comment-form-rating">
+																			<label for="rating" class="col-form-label mr-2">Đánh giá của bạn</label>
+																			<select name="vote" id="rating" class="form-control form-control-sm col-sm-2" required>
+																				<option value="">Xếp hạng&hellip;</option>
+																				<option value="5">Rất tốt</option>
+																				<option value="4">Tốt</option>
+																				<option value="3">Trung bình</option>
+																				<option value="2">Không tệ</option>
+																				<option value="1">Rất Tệ</option>
+																			</select>
+																		</div>
+																		<div class="comment-form-comment">
+																			<label for="comment" class="form-label">
+																				Đánh giá của bạn
+																			</label>
+																			<textarea class="form-control" id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+																		</div>
+																		<div class="comment-form-author">
+																			<label for="author" class="form-label">Tên</label>
+																			<input class="form-control" id="author" name="name"
+																				   type="text" value="" size="30"
+																				   aria-required="true"/>
+																		</div>
+																		<div class="comment-form-email">
+																			<label for="email" class="form-label">Email <span class="required">*</span></label>
+																			<input class="form-control" id="email" name="email"
+																				   type="text" value="" size="30"
+																				   aria-required="true" required/>
+																		</div>
+																		<input type='hidden'
+																			   name='product'
+																			   value='{{ object.id }}'/>
+																		{% csrf_token %}
+																		<p class="form-submit">
+																			<input name="submit" type="submit" id="submit"
+																				   class="submit" value="Gửi đi"/>
+																		</p>
+																	</form>
+																	<script>
+																		waitJquery(function() {
+																			jQuery('#review-form').on('submit', function(event) {
+																				event.preventDefault();
+
+																				var form = jQuery(this);
+																				var url = form.attr('action');
+																				$.ajax({
+																				type: "POST",
+																					url: url,
+																					data: form.serialize(),
+																					success: function(result, status, xhr)
+																					{
+																						form.find('.invalid-feedback').remove();
+																						var all_input_fields = form.find('input,select,textarea')
+																						all_input_fields.removeClass('is-invalid');
+																						if (result.errors) {
+																							all_input_fields.addClass('is-valid');
+																							for (field in result.errors) {
+																								var input_field = form.find('#' + field);
+																								input_field.removeClass('is-valid');
+																								input_field.addClass('is-invalid');
+																								var errors = result.errors[field];
+																								for (i in errors) {
+																									var msg = '<div class="invalid-feedback">' + errors[i] + '</div>';
+																									input_field.after(msg);
+																								};
+																							};
+																						};
+																						if (result.data) {
+																							var review = result.data;
+																							var review_element = `\
+																							<li class="comment byuser comment-author-admin bypostauthor even thread-even depth-1">
+																								<div id="comment-${review.id }" class="comment_container">
+																									<img alt=''
+																										src='http://2.gravatar.com/avatar/59eb21e276c263a344e0904ba89841ed?s=60&#038;d=mm&#038;r=g'
+																										srcset='http://2.gravatar.com/avatar/59eb21e276c263a344e0904ba89841ed?s=120&#038;d=mm&#038;r=g 2x'
+																										class='avatar avatar-60 photo'
+																										height='60' width='60'/>
+																									<div class="comment-text">
+																										<div class="star-rating" role="img"
+																											aria-label="Được xếp hạng ${review.vote} sao">
+																												<span style="width:${review.rate}%">Được xếp hạng <strong
+																														class="rating">${review.vote}</strong> sao</span>
+																										</div>
+																										<p class="meta">
+																											<strong class="woocommerce-review__author">${review.name}</strong>
+																											<span class="woocommerce-review__dash">&ndash;</span>
+																											<time class="woocommerce-review__published-date"
+																												datetime="${review.created_time}">
+																												${review.created_time}
+																											</time>
+																										</p>
+																										<div class="description">
+																											<p>${review.comment}</p>
+																										</div>
+																									</div>
+																								</div>
+																							</li>`;
+																							jQuery('#comments ol').prepend(review_element);
+																							jQuery('.entry-summary .star-rating span').css('width', review.product_review_rate + '%');
+																							jQuery('span.count').text(review.product_review_count);
+																							alert(result.msg);
+																							form.trigger('reset');
+																						};
+																					},
+																				});
+																			});
+																		});
+																	</script>
+																</div>
+															</div>
+														</div>
+														<div class="clear"></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<section class="related products">
+										<h2>Related products</h2>
+										<ul class="products columns-4 owl-theme owl-carousel owl-loaded owl-drag">
+											{% for related_object in object.get_related_products %}
+											<li class="item first product type-product status-publish has-post-thumbnail instock featured shipping-taxable purchasable product-type-simple"
+													style="min-height: 412px;">
+													<div class="product-image">
+														<a href="{% url 'products.detail' related_object.slug %}"
+														   title="{{ related_object.name }}">
+															{% if related_object.thumbnail %}
+															<img width="480" height="300"
+																 src="{{ related_object.thumbnail.path.url }}"
+																 class="attachment-product-thumb size-product-thumb wp-post-image"
+																 alt="{{ related_object.thumbnail.alt }}"
+																 sizes="(max-width: 480px) 100vw, 480px">
+															{% else %}
+															<img width="480" height="300"
+																 src="/static/images/empty_image.png"
+																 class="attachment-product-thumb size-product-thumb wp-post-image"
+																 alt=""
+																 sizes="(max-width: 480px) 100vw, 480px">
+															{% endif %}
+														</a>
+														<div class="product-img-hover">
+															<div class="product-img-hover-item hover-item-tax1">
+																{% for label in object.get_payment_type_label %}
+																<span class="color_span-{{ forloop.counter0 }}">{{ label }}</span>
+																{% endfor %}
+															</div>
+														</div>
+													</div>
+													<div class="product-detail">
+														<h3>
+															<a href="{% url 'products.detail' related_object.slug %}"
+															   title="{{ related_object.name }}" style="min-height: 21px;">
+																{{ related_object.name }}
+															</a>
+														</h3>
+														<div class="product-address">
+															<span><i class="fa fa-map-marker"></i></span>
+															{{ related_object.get_full_address }}
+														</div>
+														<div class="product-contact">
+<!--															<div class="product-call">-->
+<!--																<a href="{% if related_object.user %}{{ related_object.user.userprofile.phone_number }}{% else %}#{% endif %}"-->
+<!--																   title="" class="call-hotline">-->
+<!--																	<span><i class="fa fa-phone"></i></span>-->
+<!--																</a>-->
+<!--															</div>-->
+															<span class="price">
+																<span class="woocommerce-Price-amount amount">{{ related_object.price|intcomma }}
+																	<span class="woocommerce-Price-currencySymbol">₫</span></span></span>
+														</div>
+														<div class="product-list">
+															<div class="product-list-infor">
+																<div class="product-item-infor"><img
+																		src="http://theme264v45.demov5.keyweb.vn/userdata/7190/wp-content/themes/keyweb/css/images/ped.png"
+																		alt="Giường ngủ"><span>{{ related_object.get_bedroom_display }} Ngủ</span>
+																</div>
+																<div class="product-item-infor"><img
+																		src="http://theme264v45.demov5.keyweb.vn/userdata/7190/wp-content/themes/keyweb/css/images/bath.png"
+																		alt="Phòng tắm"><span>{{ related_object.get_toilet_display }} Tắm</span>
+																</div>
+																<div class="product-item-infor"><img
+																		src="http://theme264v45.demov5.keyweb.vn/userdata/7190/wp-content/themes/keyweb/css/images/square.png"
+																		alt="Diện tích"><span>{{ related_object.area }} m²</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</li>
+											{% endfor %}
+										</ul>
+									</section>
+								</div>
+								<script>
+									waitJquery(function(){
+										checkMinheight('#thumbnailSlider .item img');
+										checkMinheight('#slider .item img');
+										jQuery('.filter-wapper').click(function(){
+											var check = setInterval(function(){
+													checkMinheight('#thumbnailSlider .item img');
+													checkMinheight('#slider .item');
+											}, 1000);
+											setTimeout(function(){
+												clearInterval(check);
+											},10000);
+										});
+									});
+									waitJquery(function(){
+										var owl_slide_pro = jQuery('.full-content .related ul.products');
+										owl_slide_pro.owlCarousel({
+											nav:true,
+											autoHeight:false,
+											autoplay:false,
+											margin: 20,
+											autoplayTimeout:3000,
+											autoplayHoverPause:false,
+											items:3,
+											loop:false,
+											dots:false,
+											smartSpeed:1000,
+											nav:true,
+											responsive:{
+											320:{
+												items:1
+												},
+											480:{
+												items:2
+												},
+											600:{
+												items:2
+												},
+											990:{
+												items:3
+												}
+											}
+										});
+										var owl_slide_pro = jQuery('.rc_wc_rvp_product_list_widget');
+										owl_slide_pro.show().addClass('owl-theme owl-carousel').owlCarousel({
+											nav:true,
+											autoHeight:false,
+											autoplay:false,
+											margin: 20,
+											autoplayTimeout:3000,
+											autoplayHoverPause:false,
+											items:3,
+											loop:false,
+											dots:false,
+											smartSpeed:1000,
+											responsive:{
+											320:{
+												items:1
+												},
+											480:{
+												items:2
+												},
+											600:{
+												items:3
+												},
+											990:{
+												items:5
+												},
+											1200:{
+												items:5
+												}
+											}
+										});
+									});
+								</script>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+			<script>
+				waitJquery(function(){
+					checkMinheight('.related .products li h3 a');
+					checkMinheight('.related .products li');
+				});
+				/*global single_product_params */
+			</script>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block extensions %}
+{% endblock %}

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+{% load humanize %}
+<html lang="vi" class="smoothscroll scrollTo ">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!--	Title	-->
+	<title>{% block title %}{% endblock %} &ndash; Kênh thông tin bất động sản &ndash; Mua bán nhà đất hàng đầu Việt Nam</title>
+	<meta name="description" content="PowerX | Năng lượng cho mọi nhà">
+
+	<!--	Meta keywords	-->
+	<meta name="keywords" content="DavinoPowerX | Năng lượng cho mọi nhà, davinosoft.com.vn">
+	<meta property="og:url" content="https://powerx.davinosoft.com.vn/">
+	<meta property="og:site_name" content="DavinoPowerX | Năng lượng cho mọi nhà">
+
+	<!--	CSS		-->
+	<link rel='stylesheet' id='fvm-header-0-css' href='/static/css/header_1.css' type='text/css' media='all' />
+	<link rel='stylesheet' id='fvm-header-2-css' href='/static/css/header_2.css' type='text/css' media='all' />
+	<link rel="stylesheet" type="text/css" href="/static/css/smart_slider.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/static/css/spinner.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="/static/css/ads_popup.css" media="all" />
+
+	<script type="text/javascript" src="/static/js/jquery.min.js"></script>
+	<script type='text/javascript' src='/static/js/header.js'></script>
+	<script type="text/javascript" src="/static/js/bg_home.js"></script>
+	<script type="text/javascript" src="/static/js/smart_slider_1.js"></script>
+	<script type="text/javascript" src="/static/js/smart_slider_2.js"></script>
+	<script type="text/javascript" src="/static/js/smart_slider_3.js"></script>
+	<script type="text/javascript" src="/static/js/smart_slider_4.js"></script>
+	<script type="text/javascript" src="/static/js/smart_slider_5.js"></script>
+
+	<!--	Content Header		-->
+	{% block header %}
+	{% endblock %}
+</head>
+
+<body class="home page-template-default page page-id-14 woocommerce theme-keyweb woocommerce-no-js mega-menu-primary">
+	<div id="full-container">
+		<!--		Menu Bar 		-->
+		<div class="full-row full-header-top">
+			<div class="full-menubar full-home-menubar">
+				<div class="inner-menubar inner-container">
+					<div class="limit-page">
+						<nav id="menubar">
+							<div class="navbar">
+								<div class="navbar-inner">
+									<div class="logo">
+										<a href="{% url 'home' %}"><img src="/static/images/logo.png"></a>
+									</div>
+									<div class="container">
+										<div class="nav-collapse collapse">
+											<div id="mega-menu-wrap-primary" class="mega-menu-wrap">
+												<div class="mega-menu-toggle">
+													<div class="mega-toggle-blocks-left"></div>
+													<div class="mega-toggle-blocks-center"></div>
+													<div class="mega-toggle-blocks-right">
+														<div class='mega-toggle-block mega-menu-toggle-animated-block mega-toggle-block-1'
+															id='mega-toggle-block-1'>
+															<button aria-label="Toggle Menu"
+																class="mega-toggle-animated mega-toggle-animated-slider"
+																type="button" aria-expanded="false">
+																<span class="mega-toggle-animated-box">
+																	<span class="mega-toggle-animated-inner"></span>
+																</span>
+															</button>
+														</div>
+													</div>
+												</div>
+												<ul id="mega-menu-primary"
+													class="mega-menu max-mega-menu mega-menu-horizontal mega-no-js"
+													data-event="hover" data-effect="slide" data-effect-speed="200"
+													data-effect-mobile="slide_right" data-effect-speed-mobile="200"
+													data-mobile-force-width="false" data-second-click="go"
+													data-document-click="collapse" data-vertical-behaviour="accordion"
+													data-breakpoint="600" data-unbind="true">
+													<li class='mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-menu-item-home mega-current-menu-item mega-page_item mega-page-item-14 mega-current_page_item mega-align-bottom-left mega-menu-flyout mega-menu-item-713'
+														id='mega-menu-item-713'>
+														<a class="mega-menu-link" href="{% url 'home' %}">Trang chủ</a></li>
+													<li class='mega-menu-item mega-menu-item-type-post_type_archive mega-menu-item-object-product mega-menu-item-has-children mega-align-bottom-left mega-menu-flyout mega-menu-item-714'
+														id='mega-menu-item-714'>
+														<a class="mega-menu-link" href="{% url 'products' %}"
+															aria-haspopup="true" aria-expanded="false">Tất cả tin rao<span class="mega-indicator"></span></a>
+														<ul class="mega-sub-menu">
+															{% for property_type in property_types.values %}
+															<li
+																class='mega-menu-item mega-menu-item-type-taxonomy mega-menu-item-object-pro_type mega-menu-item'>
+																<a class="mega-menu-link"
+																	href="{{ property_type.url }}">{{ property_type.name }}</a>
+															</li>
+															{% endfor %}
+															{% for payment_type in payment_types.values %}
+															<li
+																class='mega-menu-item mega-menu-item-type-taxonomy mega-menu-item-object-pro_type mega-menu-item'>
+																<a class="mega-menu-link"
+																	href="{{ payment_type.url }}">{{ payment_type.name }}</a>
+															</li>
+															{% endfor %}
+															{% for category in categories %}
+															<li
+																class='mega-menu-item mega-menu-item-type-taxonomy mega-menu-item-object-pro_type mega-menu-item'>
+																<a class="mega-menu-link"
+																	href="{{ category.get_absolute_url }}">{{ category.name }}</a>
+															</li>
+															{% endfor %}
+														</ul>
+													</li>
+													<li class='mega-menu-item mega-menu-item-type-taxonomy mega-menu-item-object-category mega-align-bottom-left mega-menu-flyout mega-menu-item-722'
+														id='mega-menu-item-722'><a class="mega-menu-link"
+															href="{% url 'news' %}">Tin tức</a></li>
+													<li class='mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-align-bottom-left mega-menu-flyout mega-menu-item-723'>
+														<a class="mega-menu-link" href="{% url 'introduction' %}">Giới thiệu</a></li>
+													<li class='mega-menu-item mega-menu-item-type-post_type mega-menu-item-object-page mega-align-bottom-left mega-menu-flyout mega-menu-item-724'>
+														<a class="mega-menu-link" href="{% url 'contact' %}">Liên hệ</a></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</nav>
+					</div>
+				</div>
+			</div>
+			{% block menu_bar %}
+			{% endblock %}
+		</div>
+		<!--		End Bar 		-->
+		<div class="full-content">
+			<!--		Block content		-->
+			{% block content %}
+			{% endblock %}
+			<!--		Full content		-->
+			<script style="text/javascript" src="/static/js/home_hidden_btn.js"></script>
+		</div>
+		<!--		Full content		-->
+		<!--		Main Footer		-->
+		{% block footer %}
+		<div class="full-footer-box" style="background-image: url(/static/images/bg_footer.jpg);">
+			<div class="inner-footer-box inner-container">
+				<div id="footer-box" class="footer-box">
+					<div class="limit-page">
+						<div class="footer-box1 group-footer">
+							<div class="title title-ft text-group ">
+								<h3 class="active">Giới thiêu chung</h3>
+							</div>
+							<div class="contents content-group content-group1 contents-andress">
+								{{ general_config.description }}
+							</div>
+						</div>
+						<div class="footer-box2 group-footer align-right">
+							<div class="title title-ft text-group ">
+								<h3>Dự án</h3>
+							</div>
+							<div class="contents content-group">
+								<ul>
+									{% for property_type in property_types.values %}
+									<li class="menu-item menu-item-type-post_type menu-item-object-page">
+										<a href="{{ property_type.url }}">{{ property_type.name }}</a>
+									</li>
+									{% endfor %}
+									{% for payment_type in payment_types.values %}
+									<li class="menu-item menu-item-type-post_type menu-item-object-page">
+										<a href="{{ payment_type.url }}">{{ payment_type.name }}</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+						<div class="footer-box3 group-footer align-left">
+							<div class="title title-ft text-group">
+								<h3>Hướng dẫn</h3>
+							</div>
+							<div class="contents content-group">
+								<ul>
+									<li class="menu-item menu-item-type-post_type menu-item-object-page">
+										<a href="{% url 'home' %}">Trang chủ</a>
+									</li>
+									<li class="menu-item menu-item-type-post_type menu-item-object-page">
+										<a href="{% url 'news' %}">Tin tức</a>
+									</li>
+									<li class="menu-item menu-item-type-post_type menu-item-object-page">
+										<a href="{% url 'introduction' %}">Giới thiệu</a>
+									</li>
+									<li class="menu-item menu-item-type-post_type menu-item-object-page">
+										<a href="{% url 'contact' %}">Liên hệ</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="footer-box4 group-footer align-right">
+							<div class="title title-ft text-group ">
+								<h3>Liên hệ với chúng tôi</h3>
+							</div>
+							<div class="contents content-group">
+								<h4>Bạn cần hỗ trợ?</h4>
+								<div class="hotline-ft">
+									<a href="tel:{{ general_config.hotline }}" title="">{{ general_config.hotline }}</a>
+								</div>
+								<div class="contents-andress">
+									{{ general_config.address }}
+								</div>
+								<div class="social_footer">
+									<ul class="follow_option">
+										{% if general_config.facebook %}
+										<li>
+											<a href="{{ general_config.facebook }}" title="Theo dõi Facebook Trang mua sắm hàng đầu Việt Nam"><i
+													class="fa fa-facebook"></i></a>
+										</li>
+										{% endif %}
+										{% if general_config.google %}
+										<li>
+											<a href="{{ general_config.google }}"
+												title="Theo dõi GoogleTheo dõi Google Plus Trang mua sắm hàng đầu Việt Nam"><i
+													class="fa fa-google"></i></a>
+										</li>
+										{% endif %}
+										{% if general_config.instagram %}
+										<li>
+											<a href="{{ genral_config.instagram }}" title="Theo dõi Instagam Trang mua sắm hàng đầu Việt Nam"><i
+													class="fa fa-instagram"></i></a>
+										</li>
+										{% endif %}
+										{% if general_config.twitter %}
+										<li>
+											<a href="{{ general_config.twitter }}" title="Theo dõi Twitter Trang mua sắm hàng đầu Việt Nam"><i
+													class="fa fa-twitter"></i></a>
+										</li>
+										{% endif %}
+										{% if general_config.youtube %}
+										<li>
+											<a href="{{ general_config.youtube }}" title="Theo dõi Youtube Trang mua sắm hàng đầu Việt Nam"><i
+													class="fa fa-youtube-play"></i></a>
+										</li>
+										{% endif %}
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="full-footer">
+			<div class="inner-footer inner-container">
+				<footer id="footer" class="footer">
+					<div class="limit-page">
+						<div class="contents flex">
+							<p class="flex-l"></p>
+							<p class="flex-r">Thiết kế: <a href="https://davinosoft.com.vn/">Davinosoft.com.vn</a></p>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+		{% endblock %}
+		<!--		Full Footer		-->
+	</div>
+
+	<!--		Extension Features		-->
+	<!--		Go Top		-->
+	<div id="bttop" title="Lên đầu trang" class="fa fa-chevron-up">
+	</div>
+	<!--		Social Side Bar		-->
+	<div class="sidebar-social-link hidden-xs">
+		<div class="sidebar-social-load">
+			{% if general_config.hotline %}
+			<div class="social-link-item">
+				<a class="link-social hotline" href="tel:{{ general_config.hotline }}">
+					<span>hotline</span>
+				</a>
+			</div>
+			{% endif %}
+			{% for category in categories %}
+			<div class="social-link-item">
+				<a target="_blank" class="link-social duan" href="{{ category.get_absolute_url }}">
+					<span>{{ category.name }}</span>
+				</a>
+			</div>
+			{% endfor %}
+			{% if general_config.facebook %}
+			<div class="social-link-item">
+				<a target="_blank" class="link-social fanpage" href="{{ general_config.facebook }}">
+					<span>Facebook</span>
+				</a>
+			</div>
+			{% endif %}
+			{% if general_config.youtube %}
+			<div class="social-link-item">
+				<a target="_blank" class="link-social youtube" href="{{ general_config.youtube }}">
+					<span>Youtube</span>
+				</a>
+			</div>
+			{% endif %}
+		</div>
+		<span class="show_hide"></span>
+	</div>
+	<!--		Full Side Bar		-->
+	{% block extensions %}
+	{% endblock %}
+
+	<!--		Footer JS		-->
+	<script type='text/javascript' src="/static/js/scroll.js"></script>
+	<script type='text/javascript' src='/static/js/footer.js'></script>
+	<script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
+	<!--		Footer CSS		-->
+	<link rel='stylesheet' id='font_autoload' href='/static/css/footer.css' type='text/css' media='all' />
+	<link rel='stylesheet' id='font_autoload-css' href='/static/css/font.css' type='text/css' media='all' />
+</body>
+
+</html>

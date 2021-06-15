@@ -1,0 +1,115 @@
+{% extends 'base_news.html' %}
+{% load humanize %}
+{% load lookup %}
+
+{% block main_content %}
+<section class="content-box-1 container-post">
+					<div id="primary" class="site-content">
+						<div id="content" role="main">
+							<h1 class="page-title">{{ title }}</h1>
+							<div class="category-meta"></div>
+							<div class="list-news margin--10">
+								{% for object in page_obj %}
+								<div class="item-post flex-col-3 post type-post status-publish format-standard has-post-thumbnail hentry category-tin-tuc">
+									<div class="news-item item-news">
+										<div class="news-img">
+											<a href="{{ object.get_absolute_url }}">
+												<img width="650" height="406"
+													src="{% if object.image %}{{ object.image.url }}{% else %}/static/images/empty_image.png{% endif %}"
+													class="attachment-post-thumbnail size-post-thumbnail wp-post-image"
+													sizes="(max-width: 650px) 100vw, 650px" style="min-height: 175px;">
+											</a>
+										</div>
+										<div class="news-detail">
+											<div class="news-info">
+												<div class="news-date">
+													<i class="fas fa-calendar-alt"></i>{{ object.created_time|date:'d/m/Y' }}</div>
+												<div class="news-comment">
+													<i class="fas fa-comments"></i>
+													<span class="comment-news">
+														<span class="fb_comments_count">{{ object.comments.all|length }}</span>
+													</span>
+												</div>
+											</div>
+											<div class="news-info-wrapper">
+												<div class="news-title" style="min-height: 75px;">
+													<a href="{{ object.get_absolute_url }}">
+														{{ object.title }}
+													</a>
+												</div>
+												<div class="news-desc">
+													{{ object.get_short_description }}
+													<a href="{% url 'news.detail' object.slug %}"
+													   title="{{ object.title }}">Đọc tiếp</a>
+												</div>
+											</div>
+											<div class="news-author news-share">
+												<div class="news-info-author news-share-l">
+													<img alt=""
+														src="http://2.gravatar.com/avatar/59eb21e276c263a344e0904ba89841ed?s=32&amp;d=mm&amp;r=g"
+														srcset="http://2.gravatar.com/avatar/59eb21e276c263a344e0904ba89841ed?s=64&amp;d=mm&amp;r=g 2x"
+														class="avatar photo" height="32" width="32">{{ object.created_by }}
+												</div>
+												<div class="news-share-r">
+													<div class="sharing_button">
+														<span><i class="fa fa-share-alt"></i></span>
+														<div class="social-media">
+															<a target="_blank"
+																href="//www.facebook.com/sharer.php?u={{ object.get_absolute_url }}"
+																class="share-facebook" title="Chia sẻ lên Facebook">
+																<i class="fa fa-facebook"></i>
+															</a>
+															<a target="_blank"
+																href="//twitter.com/share?text={{ object.title }}&amp;url={{ object.get_absolute_url }}"
+																class="share-twitter" title="Chia sẻ lên Twitter">
+																<i class="fa fa-twitter"></i>
+															</a>
+															<a target="_blank"
+																href="//plus.google.com/share?url={{ object.get_absolute_url }}"
+																class="share-google" title="+1">
+																<i class="fa fa-google"></i>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div><!-- #content -->
+						<script async="" defer="">
+							jQuery(document).ready(function ($) {
+								setTimeout(function () {
+									checkMinheight('.news-img img');
+									checkMinheight('.news-title');
+								}, 1000);
+							});
+						</script>
+						{% if is_paginated %}
+						<div class="pagenavi" role="navigation">
+							{% if page_obj.has_previous %}
+							<a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+							{% else %}
+							<span aria-current="page" class="current">&laquo;</span>
+							{% endif %}
+
+							{% for i in paginator.page_range %}
+							{% if page_obj.number == i %}
+							<span aria-current="page" class="current">{{ i }}</span>
+							{% else %}
+							<a href="?page={{ i }}">{{ i }}</a>
+							{% endif %}
+							{% endfor %}
+
+							{% if page_obj.has_next %}
+							<a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+							{% else %}
+							<span aria-current="page" class="current">&raquo;</span>
+							{% endif %}
+						</div>
+						{% endif %}
+					</div><!-- #primary -->
+				</section>
+{% endblock %}

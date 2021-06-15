@@ -1,0 +1,212 @@
+{% extends 'base_news.html' %}
+{% load humanize %}
+{% load lookup %}
+
+{% block title %}{{ object.title }}{% endblock %}
+
+{% block menu_bar %}
+<div class="full-top-title" style="">
+	<div class="inner-container">
+		<div class="top-title-content">
+			<h1>{{ object.title }}</h1>
+		</div>
+	</div>
+</div>
+<div class="breadcrumbs-full">
+	<div class="inner-container">
+		<div class="breadcrumbs">
+			<span>
+				<span><a href="{% url 'home' %}">Trang chủ</a> / 
+					<span class="breadcrumb_last" aria-current="page">{{ object.title }}</span>
+				</span>
+			</span>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block main_content %}
+<div class="contents">
+						<h1>{{ object.title }}</h1>
+						<div class="news-info info-post">
+							<div class="news-date">
+								<i class="fas fa-calendar-alt"></i>{{ object.created_time|date:'d/m/Y' }}</div>
+							<div class="news-comment">
+								<i class="fas fa-comments"></i>
+								<span class="comment-news"><span class="fb_comments_count">{{ object.comments.all|length }}</span></span>
+							</div>
+						</div>
+						<div class="contents-post entry-content">
+							{% if object.image %}
+							<h2>
+								<img class="size-full wp-image-709 aligncenter"
+										src="{{ object.image.url }}"
+										alt="" width="650" height="406"
+										sizes="(max-width: 650px) 100vw, 650px">
+							</h2>
+							{% endif %}
+							{% if object.sub_title %}
+							<h2>
+								{{ object.sub_title }}
+							</h2>
+							{% endif %}
+							<div id="contentdetail" class="contentdetail">
+								{{ object.content|safe }}
+							</div>
+						</div>
+						<div class="entry-share">
+							<div class="social">
+								<a target="_blank"
+									href="//www.facebook.com/sharer.php?u={{ object.get_absolute_url }}"
+									class="face"><i class="fa fa-facebook"></i></a>
+								<a target="_blank"
+									href="//twitter.com/share?text={{ object.title }}&amp;url={{ object.get_absolute_url }}"
+									class="twitter"><i class="fa fa-twitter"></i></a>
+							</div>
+						</div>
+						<div class="tags">
+							{% for tag in object.tags.all %}
+							<a href="{% url 'news.tag' tag.slug %}"><i class="fa fa-tags" aria-hidden="true"></i>{{ tag.name }}</a>	&nbsp;
+							{% endfor %}
+						</div>
+						<div class="links-post">
+							{% if previous_object %}
+							<a href="{{ previous_object.get_absolute_url }}"
+								rel="prev">
+								<span class="left"><i class="fa fa-angle-double-left"></i>Bài viết cũ hơn</span>
+							</a>
+							{% endif %}
+							{% if next_object %}
+							<a href="{{ next_object.get_absolute_url }}"
+								rel="next">
+								<span class="right"><i class="fa fa-angle-double-right"></i>Bài viết mới hơn</span>
+							</a>
+							{% endif %}
+						</div>
+						<div id="comments" class="comments-area">
+							<h2 class="comments-title"><span id="comments-count">{{ object.enable_comments.count }}</span> bình luận cho “<span>{{ object.title }}</span>”</h2>
+							<ol class="commentlist">
+								{% for comment in object.enable_comments %}
+								<li class="comment even thread-even">
+									<article class="comment">
+										<div class="comment-meta comment-author vcard">
+											<img alt="" src="/static/images/gravatar.png" class="avatar avatar-44 photo" height="44" width="44">
+											<cite><b class="fn">{{ comment.name }}</b></cite>
+											<time datetime="{{ comment.created_time }}">{{ comment.created_time|date:'d/m/Y' }}</time>
+										</div>
+										<section class="comment-content comment">
+											<p>{{ comment.content }}</p>
+										</section>
+									</article>
+								</li>
+								{% endfor %}
+							</ol>
+							<div id="respond" class="comment-respond">
+								<h3 id="reply-title" class="comment-reply-title">Bình luận</h3>
+								<form action="{% url 'news.comment' %}" method="post" id="commentform" class="comment-form">
+									<p class="comment-notes">
+										<span id="email-notes">Thư điện tử của bạn sẽ không được hiện thị công khai.
+										</span> Các trường bắt buộc được đánh dấu<span class="required">*</span></p>
+									<p class="comment-form-comment">
+										<label for="content">Bình luận</label>
+										<textarea id="content" name="content" cols="45" rows="8"
+												  maxlength="65525"></textarea>
+									</p>
+									<p class="comment-form-author">
+										<label for="name">Họ tên<span class="required">*</span></label>
+										<input id="name" name="name" type="text" value="" size="30" maxlength="245">
+									</p>
+									<p class="comment-form-email"><label for="email">Thư điện tử<span class="required">*</span></label>
+										<input id="email" name="email" type="text" value="" size="30" maxlength="100"
+											   aria-describedby="email-notes">
+									</p>
+									<p class="comment-form-url">
+										<label for="phone_number">Số điện thọai</label>
+										<input id="phone_number" name="phone_number" type="text" value="" size="30" maxlength="50">
+									</p>
+									<p class="form-submit">
+										<input name="submit" type="submit" id="submit" class="submit" value="Phản hồi">
+										<input type="hidden" name="news" value="{{ object.id }}">
+										{% csrf_token %}
+									</p>
+								</form>
+								<script>
+									waitJquery(function() {
+										jQuery('#commentform').on('submit', function(event) {
+											event.preventDefault();
+
+											var form = jQuery(this);
+											var url = form.attr('action');
+											$.ajax({
+											type: "POST",
+												url: url,
+												data: form.serialize(),
+												success: function(result, status, xhr)
+												{
+													form.find('.not-valid-tip').remove();
+													var all_input_fields = form.find('input,select,textarea')
+													if (result.errors) {
+														for (field in result.errors) {
+															var input_field = form.find('[name=' + field + ']');
+															var errors = result.errors[field];
+															for (i in errors) {
+																var msg = '<span role="alert" class="not-valid-tip">' + errors[i] + '</span>';
+																input_field.after(msg);
+															};
+														};
+													};
+													if (result.data) {
+														var comment = result.data
+														var comment_element = `\
+														<li class="comment even thread-even">
+															<article class="comment">
+																<div class="comment-meta comment-author vcard">
+																	<img alt="" src="/static/images/gravatar.png" class="avatar avatar-44 photo" height="44" width="44">
+																	<cite><b class="fn">${comment.name}</b></cite>
+																	<time datetime="${comment.created_time}">${comment.created_time}</time>
+																</div>
+																<section class="comment-content comment">
+																	<p>${comment.content}</p>
+																</section>
+															</article>
+														</li>`;
+														jQuery('ol.commentlist').prepend(comment_element);
+														jQuery('#comments-count').text(comment.news_comment_count);
+														alert(result.msg);
+														form.trigger('reset');
+													};
+												},
+											});
+										});
+									});
+								</script>
+							</div>
+						</div>
+						<div class="related-post">
+							<div class="wrap">
+								<h3>Cùng danh mục</h3>
+								<ul>
+									{% for related_object in object.get_related_news_by_category %}
+									<li>
+										<a href="{{ related_object.get_absolute_url }}">
+											{{ related_object.title }}
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+							<div class="wrap">
+								<h3>Thẻ có liên quan</h3>
+								<ul>
+									{% for related_object in object.get_related_news_by_tag %}
+									<li>
+										<a href="{{ related_object.get_absolute_url }}">
+											{{ related_object.title }}
+										</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends 'index.html' %}
+{% load humanize %}
+{% load lookup %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block menu_bar %}
+<div class="full-top-title" style="">
+	<div class="inner-container">
+		<div class="top-title-content">
+			<h1>{{ title }}</h1>
+		</div>
+	</div>
+</div>
+<div class="breadcrumbs-full">
+	<div class="inner-container">
+		<div class="breadcrumbs">
+			<span><span><a href="{% url 'home' %}">Trang chủ</a> / <span class="breadcrumb_last"
+						aria-current="page">{{ title }}</span></span></span>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!--		End Bar 		-->
+<div class="full-content">
+	<div class="inner-content inner-container">
+		<div class="limit clearfix">
+		</div>
+		<div id="wrap-content" class="limit clearfix">
+			<section class="content-box-1">
+				<div id="primary" class="site-content">
+					<div id="content" role="main">
+						<div class="contact-page">
+							<div class="limit-page">
+								<div class="inner-contact">
+									<div class="contents">
+										<div class="container">
+
+											<div class="contact-address">
+												<div id="contact-map">
+													<iframe
+														src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.3035970924802!2d105.77785499786985!3d21.020534978583704!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454ac865806f3%3A0xe622b11fb8df6b87!2sC%C3%B4ng+ty+TNHH+KEYSKY!5e0!3m2!1svi!2s!4v1489220781420"
+														width="100%" height="400" frameborder="0" style="border:0"
+														allowfullscreen=""></iframe>
+												</div>
+											</div>
+											<div class="contact-form contact-address">
+												<h1>{{ general_config.company_name }}</h1>
+												<ul>
+													<li>
+														<i class="fa fa-map-marker"></i>
+														<span>{{ general_config.address }}</span>
+													</li>
+													<li>
+														<i class="fa fa-envelope-o"></i>
+														<span>{{ general_config.email }}</span>
+													</li>
+													<li>
+														<i class="fa fa-phone"></i>
+														<span>{{ general_config.hotline }}</span>
+													</li>
+												</ul>
+												<h2 class="title-box-lh">Gửi Email cho chúng tôi</h2>
+												<div role="form" class="wpcf7" id="wpcf7-f104-o1" lang="en-US"
+													dir="ltr">
+													<div class="screen-reader-response"></div>
+													<form action="{% url 'contact' %}" method="post" id="contact-form" novalidate="novalidate">
+														<div class="text-input">
+															<div class="group-text">
+																<input type="text" name="name" value="" size="40"
+																	   aria-required="true" aria-invalid="false"
+																	   placeholder="Họ tên">
+															</div>
+															<div class="group-text">
+																	<input type="email" name="email" value="" size="40"
+																		   aria-required="true" aria-invalid="false"
+																		   placeholder="Email">
+															</div>
+															<div class="group-text">
+																	<input type="text" name="phone_number" value="" size="40"
+																		   aria-invalid="false" placeholder="SĐT">
+															</div>
+														</div>
+														<div class="text-area">
+																<textarea name="content" cols="40" rows="10"
+																		  class="wpcf7-form-control wpcf7-textarea"
+																		  aria-invalid="false"
+																		  placeholder="Tin nhắn"></textarea>
+														</div>
+														<div class="button-submit">
+															{% csrf_token %}
+															<input type="submit" value="Gửi tin nhắn">
+														</div>
+													</form>
+													<script>
+														waitJquery(function() {
+															jQuery('#contact-form').on('submit', function(event) {
+																event.preventDefault();
+
+																var form = jQuery(this);
+																var url = form.attr('action');
+																$.ajax({
+																type: "POST",
+																	url: url,
+																	data: form.serialize(),
+																	success: function(result, status, xhr)
+																	{
+																		form.find('.not-valid-tip').remove();
+																		form.find('.validation-errors').remove();
+																		var all_input_fields = form.find('input,select,textarea')
+																		if (result.errors) {
+																			for (field in result.errors) {
+																				var input_field = form.find('[name=' + field + ']');
+																				var errors = result.errors[field];
+																				for (i in errors) {
+																					var msg = '<span role="alert" class="not-valid-tip">' + errors[i] + '</span>';
+																					input_field.after(msg);
+																				};
+																			};
+																			form.append('<div class="response-output display-none validation-errors" style="display: block;" role="alert">' + result.msg + '</div>')
+																		};
+																		if (!result.errors) {
+																			alert(result.msg);
+																			form.trigger('reset');
+																		};
+																	},
+																});
+															});
+														});
+													</script>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div><!-- #row-fluid -->
+	</div><!-- #inner-container -->
+</div>
+{% endblock %}

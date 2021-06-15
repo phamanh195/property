@@ -1,0 +1,98 @@
+{% extends 'index.html' %}
+{% load humanize %}
+{% load lookup %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block menu_bar %}
+<div class="full-top-title" style="">
+	<div class="inner-container">
+		<div class="top-title-content">
+			<h1>{{ title }}</h1>
+		</div>
+	</div>
+</div>
+<div class="breadcrumbs-full">
+	<div class="inner-container">
+		<div class="breadcrumbs">
+			<span>
+				<span><a href="{% url 'home' %}">Trang chủ</a> /
+					<span class="breadcrumb_last" aria-current="page">{{ title }}</span>
+				</span>
+			</span>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="full-content">
+	<div class="inner-content inner-container">
+		<div class="limit clearfix">
+		</div>
+		<div id="wrap-content" class="limit clearfix">
+			<div class="page-single">
+				<div class="limit-page flex">
+					<aside id="sidebar-left" class="sidebar-pro">
+					<div class="block-left group-sidebar danh-muc">
+						<div class="heading_box ">
+							<h3>Danh mục bài viết</h3>
+						</div>
+						<div class="block-content container-post content content-groups">
+							<div class="block-content-cat">
+								<ul id="menu-left-bar">
+									{% for news_category in news_categories %}
+									<li class="cat-item">
+										<a href="{% url 'news.category' news_category.slug %}">{{ news_category.name }}</a>
+									</li>
+									{% endfor %}
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="block-left group-sidebar">
+						<div class="heading_box ">
+							<h3>Tin tức mới nhất</h3>
+						</div>
+						<div class="block-content container-post">
+							{% for object in latest_news %}
+							<div class="item-post">
+								<div class="item-post-img">
+									<img src="{% if object.image %}{{ object.image.url }}{% else %}/static/images/empty_image.png{% endif %}"
+										alt="{{ object.title }}">
+								</div>
+								<div class="tieu-de item-post-detail">
+									<p class="title">
+										<a href="{{ object.get_absolute_url }}"
+										   title="{{ object.title }}">
+											{{ object.short_title }}
+										</a>
+									</p>
+								</div>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<div class="tags-sidebar group-sidebar">
+						<div class="tags-sidebar">
+							<h3>Tags</h3>
+						</div>
+						<div class="block-content ">
+							<div class="list">
+								{% for tag in news_tags %}
+								<a href="{% url 'news.tag' tag.slug %}" title="{{ tag.name }}">{{ tag.name }}</a>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="banner-sidebar row">
+					</div>
+				</aside>
+					{% block main_content %}
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

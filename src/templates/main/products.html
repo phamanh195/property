@@ -1,0 +1,249 @@
+{% extends 'index.html' %}
+{% load humanize %}
+{% load lookup %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block menu_bar %}
+<div class="full-top-title" style="">
+	<div class="inner-container">
+		<div class="top-title-content">
+			<h1>{{ title }}</h1>
+		</div>
+	</div>
+</div>
+<div class="breadcrumbs-full">
+	<div class="inner-container">
+		<div class="breadcrumbs">
+			<span><span><a href="{% url 'home' %}">Trang chủ</a> / <span class="breadcrumb_last" aria-current="page">{{ title }}</span></span></span>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="full-content">
+	<div class="inner-content inner-container">
+		<div class="limit clearfix">
+		</div>
+		<div id="wrap-content" class="limit clearfix">
+			<div class="limit-page">
+				<div class="contents-list">
+
+					<aside class="sidebar-pro sidebar-archive">
+						<div id="sidebar-filters" class="sidebar-filters hidden-filters">
+							<i class="fa fa-align-right"></i>
+						</div>
+
+						<div class="contents">
+							<script>
+								function insertParam(key, value) {
+									key = encodeURIComponent(key);
+									value = encodeURIComponent(value);
+									// kvp looks like ['key1=value1', 'key2=value2', ...]
+									var kvp = document.location.search.substr(1).split('&').filter(Boolean);
+									let i=0;
+									for(; i<kvp.length; i++){
+										if (kvp[i].startsWith(key + '=')) {
+											let pair = kvp[i].split('=');
+											pair[1] = value;
+											kvp[i] = pair.join('=');
+											break;
+										}
+									}
+
+									if(i >= kvp.length){
+										kvp[kvp.length] = [key,value].join('=');
+									}
+
+									// can return this or...
+									let params = kvp.join('&');
+
+									// reload page with new params
+									document.location.search = params;
+								};
+								function removeParam(key) {
+									key = encodeURIComponent(key);
+									var kvp = document.location.search.substr(1).split('&').filter(Boolean);
+									kvp = kvp.filter((param) => (!param.startsWith(key + '=')));
+
+									// can return this or...
+									let params = kvp.join('&');
+
+									// reload page with new params
+									document.location.search = params;
+								};
+
+								waitJquery(function(){
+									let filter_link = jQuery('.filter-link');
+									filter_link.click(function() {
+										var name_filter = $(this).attr('name');
+										var value_filter = $(this).attr('value');
+										if (!$(this).hasClass('active')) {
+											insertParam(name_filter, value_filter);
+										} else {
+											removeParam(name_filter);
+										};
+									});
+								});
+							</script>
+							{% for field in filter_form %}
+							<div class="danh-muc product-sidebar group-sidebar">
+								<div class="title  pro-woocommerce-title">
+									<h3>{{ field.label }}</h3>
+								</div>
+								<div class="content content-groups block-content">
+									<ul>
+										{% for option in field %}
+										<li class="menu-item">
+											<a class="filter-link{% if option.data|lookup:'selected' %} active{% endif %}"
+											   name="{{ option.data|lookup:'name' }}"
+											   value="{{ option.data|lookup:'value' }}">
+												{{ option.data|lookup:'label' }}
+											</a>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div>
+							{% endfor %}
+							<div class="product-sidebar group-sidebar product-sidebar-last">
+								<div class="title pro-woocommerce-title">
+									<h3>Dự án xem nhiều</h3>
+								</div>
+								<div class="block-content content content-groups slide-groups">
+									{% for nav_page in nav_common_products %}
+									<div class="pro_list-item">
+										{% for common_product in nav_page %}
+										<div class="pro_most_viewed-item">
+											<h4>
+												<a href="{{ common_product.get_absolute_url }}"
+												   title="{{ common_product.name }}">
+													{{ common_product.name }}
+												</a>
+											</h4>
+											<p class="price">
+													<span class="woocommerce-Price-amount amount">{{ common_product.price|intcomma }}<span
+															class="woocommerce-Price-currencySymbol">&#8363;</span></span>
+											</p>
+										</div>
+										{% endfor %}
+									</div>
+									{% endfor %}
+								</div>
+							</div>
+							<script async defer>
+				jQuery(document).ready(function($) {
+					jQuery('.slide-groups').show().addClass('owl-carousel owl-theme').owlCarousel({
+						items:1,
+						loop:false,
+						margin: 0,
+						autoplay:true,
+						autoplayTimeout:5000,
+						autoplayHoverPause:true,
+						navText:['<i class="fas fa-angle-left"></i>','<i class="fas fa-angle-right"></i>'],
+						dots: false,
+						nav: true,
+						smartSpeed:1000,
+					});
+				});
+							</script>
+						</div>
+					</aside>
+					<section class="product-box-shop content-box-1">
+						<div id="primary" class="site-content">
+							<div class="banner-product-page">
+								<a href="#" title="banner shop">
+									<img src="/static/images/shop_banner_1.jpg" alt="">
+								</a>
+							</div>
+							<div id="content" role="main">
+								<div class="contents">
+									<h2 class="title-list"> {{ title }}</h2>
+									<form class="woocommerce-ordering" method="get">
+										{{ order_form.as_select }}
+									</form>
+									<ul class="products columns-4 ">
+										{% for object in object_list %}
+										<li class="first product type-product status-publish has-post-thumbnail product-type-simple">
+											<div class="product-image">
+												<a href="{{ object.get_absolute_url }}"
+												   title="">
+													<img width="480" height="300"
+														 src="{% if object.thumb_image %}{{ object.thumb_image.image.url }}{% else %}/static/images/empty_image.png{% endif %}"
+														 class="attachment-product-thumb size-product-thumb wp-post-image"
+														 alt="{% if object.thumb_image %}{{ object.thumb_image.alt }}{% endif %}"
+														 sizes="(max-width: 480px) 100vw, 480px"/> </a>
+												<div class="product-img-hover">
+													<div class="product-img-hover-item hover-item-tax1">
+														{% for label in object.get_payment_status_label %}
+														<span class="color_span-{{ forloop.counter0 }}">{{ label }}</span>
+														{% endfor %}
+													</div>
+
+												</div>
+											</div>
+											<div class="product-detail">
+												<h3>
+													<a href="{{ object.get_absolute_url }}"
+													   title="">{{ object.name }}</a></h3>
+												<div class="product-address">
+													<span><i class="fa fa-map-marker"></i></span>
+													{{ object.full_address }}
+												</div>
+												<div class="product-contact">
+													<div class="product-call">
+														<a href="{% if object.user %}{{ object.user.phone_number }}{% else %}#{% endif %}" title="" class="call-hotline"><span><i
+																class="fa fa-phone"></i></span></a>
+													</div>
+													<span class="price"><span
+															class="woocommerce-Price-amount amount">{{ object.price|intcomma }}<span
+															class="woocommerce-Price-currencySymbol">&#8363;</span></span></span>
+												</div>
+												<div class="product-list">
+													<div class="product-list-infor">
+														<div class="product-item-infor"><img
+																src="http://theme264v45.demov5.keyweb.vn/userdata/7190/wp-content/themes/keyweb/css/images/ped.png"
+																alt="Giường ngủ"><span>&nbsp{{ object.bedroom }} Ngủ</span></div>
+														<div class="product-item-infor"><img
+																src="http://theme264v45.demov5.keyweb.vn/userdata/7190/wp-content/themes/keyweb/css/images/bath.png"
+																alt="Phòng tắm"><span>&nbsp;{{ object.toilet }} Tắm</span></div>
+														<div class="product-item-infor"><img
+																src="http://theme264v45.demov5.keyweb.vn/userdata/7190/wp-content/themes/keyweb/css/images/square.png"
+																alt="Diện tích"><span>&nbsp;{{ object.area }} m²</span></div>
+													</div>
+												</div>
+											</div>
+										</li>
+										{% endfor %}
+									</ul>
+								</div>
+							</div><!-- #content -->
+							<script>
+								waitJquery(function(){
+									// checkMinheight('#content .products li a > img');
+									// checkMinheight('#content .products li h3');
+									// checkMinheight('#content .products li');
+									jQuery('.filter-wapper').click(function(){
+										var check=setInterval(function(){
+												// checkMinheight('#content .products li a img');
+												checkMinheight('#content .products li h3');
+												// checkMinheight('#content .products li');
+										},1000);
+										setTimeout(function(){
+											clearInterval(check);
+										},10000);
+									});
+								});
+							</script>
+						</div><!-- #primary -->
+					</section>
+				</div>
+			</div>
+		</div><!-- #row-fluid -->
+	</div><!-- #inner-container -->
+</div><!-- #full-container -->
+{% endblock %}
+
+{% block extensions %}
+{% endblock %}

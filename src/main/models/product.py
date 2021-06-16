@@ -42,6 +42,8 @@ class Product(BaseUrlModel):
 
     # user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
     #                          related_name='products', null=True, blank=True)
+    created_by = models.CharField(max_length=50)
+    email = models.EmailField(max_length=50, blank=True)
     telephone = models.CharField(max_length=50)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL,
                                  related_name='products', null=True, blank=True)

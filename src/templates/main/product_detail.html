@@ -229,28 +229,26 @@
 																	<span>{{ object.get_direction_display }}</span>
 																</li>
 															</ul>
-<!--															<div class="parameter-flex-r">-->
-<!--																{% if object.user %}-->
-<!--																<div class="avatar-parameter">-->
-<!--																	<img src="{% if object.user.userprofile.avatar %}{{ object.user.userprofile.avatar }}{% else %}/static/images/empty_image.png{% endif %}"-->
-<!--																		 alt="{{ object.user.username }}">-->
-<!--																</div>-->
-<!--																<ul class="parameter-manage">-->
-<!--																	<li>-->
-<!--																		<p>Tên liên lạc</p>-->
-<!--																		<span>{{ object.user.get_full_name }}</span>-->
-<!--																	</li>-->
-<!--																	<li>-->
-<!--																		<p>Số điện thoại</p>-->
-<!--																		<a href="tel:{{ object.user.userprofile.phone_number }}">{{ object.user.userprofile.phone_number }}</a>-->
-<!--																	</li>-->
-<!--																	<li>-->
-<!--																		<p>Thư điện tử</p>-->
-<!--																		<a href="mailto:{{ object.user.email }}">{{ object.user.email }}</a>-->
-<!--																	</li>-->
-<!--																</ul>-->
-<!--																{% endif %}-->
-<!--															</div>-->
+															<div class="parameter-flex-r">
+																<div class="avatar-parameter">
+																	<img src="/static/images/empty_image.png"
+																		 alt="{{ object.created_by }}">
+																</div>
+																<ul class="parameter-manage">
+																	<li>
+																		<p>Tên liên lạc</p>
+																		<span>{{ object.created_by }}</span>
+																	</li>
+																	<li>
+																		<p>Số điện thoại</p>
+																		<a href="tel:{{ object.telephone }}">{{ object.telephone }}</a>
+																	</li>
+																	<li>
+																		<p>Thư điện tử</p>
+																		<a href="mailto:{{ object.email }}">{{ object.email }}</a>
+																	</li>
+																</ul>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -496,12 +494,12 @@
 															{{ related_object.get_full_address }}
 														</div>
 														<div class="product-contact">
-<!--															<div class="product-call">-->
-<!--																<a href="{% if related_object.user %}{{ related_object.user.userprofile.phone_number }}{% else %}#{% endif %}"-->
-<!--																   title="" class="call-hotline">-->
-<!--																	<span><i class="fa fa-phone"></i></span>-->
-<!--																</a>-->
-<!--															</div>-->
+															<div class="product-call">
+																<a href="{{ related_object.telephone }}"
+																   title="{{ related_object.telephone }}" class="call-hotline">
+																	<span><i class="fa fa-phone"></i></span>
+																</a>
+															</div>
 															<span class="price">
 																<span class="woocommerce-Price-amount amount">{{ related_object.price|intcomma }}
 																	<span class="woocommerce-Price-currencySymbol">₫</span></span></span>

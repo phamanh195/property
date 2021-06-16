@@ -7,6 +7,17 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+import sys
+import os
+import django
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append(BASE_DIR)
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings')
+
+django.setup()
+
 BOT_NAME = 'crawling_service'
 
 SPIDER_MODULES = ['crawling_service.spiders']
@@ -62,9 +73,12 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'crawling_service.pipelines.CrawlingServicePipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'scrapy.pipelines.images.ImagesPipeline': 1,
+   'crawling_service.pipelines.CrawlingServicePipeline': 1,
+}
+
+IMAGE_STORE = os.path.join(BASE_DIR, 'media/product')
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
